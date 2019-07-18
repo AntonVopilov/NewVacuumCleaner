@@ -84,9 +84,6 @@ class ReqtangleBody(AbstractBody):
             y_tr = -self.length // 2
         return x_tr, y_tr
 
-
-
-
     def set_body_points(self):
         buffer_points = set()
         for x in range(self.width):
@@ -102,6 +99,7 @@ class ReqtangleBody(AbstractBody):
         for x in range(self.width):
             self._body_points['special'].add(
                 transition((x, 0), x_tr, y_tr))
+
 
 class CircleBody(AbstractBody):
     def __init__(self, r):
@@ -119,13 +117,11 @@ class CircleBody(AbstractBody):
 
             if y_max != 0:
                 for y in range(y_max):
-
                     buffer_body.add((x, y))
                     buffer_body.add((x, - y))
             else:
 
                 buffer_body.add((x, y_max))
-
 
         for point in buffer_body:
             self._body_points['order'].add(point)
@@ -134,6 +130,7 @@ class CircleBody(AbstractBody):
         for y in range(round(mp.sqrt(self.radius ** 2))):
             self._body_points['special'].add((0, y))
             self._body_points['special'].add((0, -y))
+
 
 if __name__ == '__main__':
     obj = CircleBody(4)

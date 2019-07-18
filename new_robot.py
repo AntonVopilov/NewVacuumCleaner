@@ -2,6 +2,7 @@ from curses import KEY_RIGHT, KEY_LEFT, KEY_DOWN, KEY_UP, KEY_F1, KEY_F2
 import math as mp
 import new_body_maker as mb
 
+commands = {KEY_RIGHT, KEY_LEFT, KEY_DOWN, KEY_UP, KEY_F1, KEY_F2}
 
 class Robot(object):
 
@@ -13,6 +14,7 @@ class Robot(object):
 
         # self.body = mb.CircleBody(r)
         self.body = mb.ReqtangleBody(r, r)
+        self.size = r
 
         self.map_obj = map_obj
         self.collision = False
@@ -88,4 +90,26 @@ class Robot(object):
                 window.addch(point[1], point[0], self.body.order_char)
             for point in self.special_pnts:
                 window.addch(point[1], point[0], self.body.special_char)
+
+    def get_view_box(self, scr_wd, scr_len):
+        x = max(0, self.x_pos - 2 * self.size)
+        y = max(0, self.y_pos - 2 * self.size)
+        return y, x, 1, 1, scr_len - 1, scr_wd // 2
+
+import curses
+def main(stdscr):
+
+    robot = Robot(6, 6, 0, 5, [])
+    robot.update_scr(stdscr, KEY_UP)
+    stdscr.refresh()
+
+    while True:
+        event = stdscr.getch()
+        if event not in commands:
+            break
+        robot.update_scr(stdscr, event)
+        stdscr.refresh()
+if __name__ == '__main__':
+    curses.wrapper(main)
+
 

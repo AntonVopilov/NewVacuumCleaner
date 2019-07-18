@@ -1,41 +1,45 @@
 import curses
+import argparse
+
 import new_map as nm
-from curses import KEY_RIGHT, KEY_LEFT, KEY_DOWN, KEY_UP, KEY_F1, KEY_F2
 import new_robot as rob
 import time
 
-def main(stdscr):
+ROB_SIZE = 5
+
+
+def create_parser():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-wd', '--width', default=100, type=int)
+    parser.add_argument('-lg', '--length', default=100, type=int)
+    parser.add_argument('-n', '--num_hurdles', default=100, type=int)
+    return parser
+
+
+def main(stdscr, map_width, map_length, hurdles_count):
     stdscr.clear()
-    stdscr.keypad(1)
+    stdscr.keypad(True)
     curses.noecho()
-    curses.curs_set(0)
+    curses.curs_set(False)
+    stdscr.refresh()
 
     scr_length, scr_width = stdscr.getmaxyx()
 
-    stdscr.clear()
-    stdscr.refresh()
+    pad = curses.newpad(map_length + 1, map_width + 1)
+    x_pos, y_pos = map_width // 2, map_length // 2
+    angle = 0
 
-    max_x = 40
-    max_y = 20
-    num = 10
-    max_size = 4
+    # hurdles = nm.hurdle_fabric(map_width, map_length, ROB_SIZE, hurdles_count,
+    #                            x_pos, y_pos, ROB_SIZE)
+    #
+    # nm.create_map_window(pad, hurdles, '#')
 
-    pad = curses.newpad(max_x+4, max_y+4)
-    view_box = [1, 1, scr_length - 1, scr_width // 2]
-
-
-    hurdles = nm.create_map_window(pad, '#', max_x, max_y, max_size, num)
-    pad.refresh(0, 0, view_box[0], view_box[1], view_box[2], view_box[3])
-
-
-    # robot_object = rob.Robot(max_x//2, max_y//2, 0, 4, hurdles)
-    # robot_object.update_scr(stdscr, KEY_UP)
-
+    robot_object = rob.Robot(x_pos, y_pos, angle, ROB_SIZE, [])
+    view_box = robot_object.get_view_box(scr_width, scr_length)
+    pad.refresh(*view_box)
+    time.sleep(3)
+    robot_object.update_scr(stdscr, rob.KEY_UP)
     time.sleep(10)
-
-
-
-
 
     # robot_object = rob.Robot(10, 10, 0, 9, [])
     #
@@ -47,5 +51,10 @@ def main(stdscr):
     #
     #     robot_object.update_scr(stdscr, event)
 
+
 if __name__ == '__main__':
-    curses.wrapper(main)
+    parser = create_parser()
+    namespace = parser.parse_args()
+
+    curses.wrapper(main, namespace.width,
+                   namespace.length, namespace.num_hurdles)

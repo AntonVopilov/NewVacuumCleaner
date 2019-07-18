@@ -4,7 +4,7 @@ from random import randint, choice
 import new_body_maker as bm
 
 
-def hurdle_fabric(max_x, max_y, max_size, num_hurdles):
+def hurdle_fabric(max_x, max_y, max_size, num_hurdles, x, y, size):
     """
     Функция генерирует препятсвия случайного размера и в случайном положении
     max_x - крайннее допустимое значение по оси х
@@ -23,20 +23,40 @@ def hurdle_fabric(max_x, max_y, max_size, num_hurdles):
         hurdle = choice(
             [bm.ReqtangleBody(randint(1, max_size), randint(1, max_size)),
              bm.CircleBody(randint(1, max_size))])
-        size = hurdle.get_max_size()
-
-
-        x_tr = randint(size + 1, max_x  - size - 1)
-        y_tr = randint(size + 1, max_y - size - 1)
+        x_tr = randint(2, max_x - 2)
+        y_tr = randint(2, max_y - 2)
         angle = choice(angles)
 
         for point in hurdle.get_all_body_points(x_tr, y_tr, angle):
-            hurdles.add(point)
+            if (x - size < point[0] < x + size) and (y - size < point[1] < y + size):
+                continue
+            elif (0 < point[0] < max_x) and (0 < point[1] < max_y):
+                hurdles.add(point)
+    for x in range(max_x):
+        hurdles.add((x, 0))
+        hurdles.add((x, max_y - 1))
+    for y in range(max_y):
+        hurdles.add((0, y))
+        hurdles.add((max_x - 1, y))
     return hurdles
 
-def create_map_window(window, char, max_x, max_y, max_size, num_hurdles):
-    hurdles = hurdle_fabric(max_x, max_y, max_size, num_hurdles)
+
+
+def create_map_window(window, hurdles, char):
     for point in hurdles:
-        window.addch(point[1], point[0], char)
+        try:
+            window.addch(point[1], point[0], char)
+        except:
+            with open('error_points.txt', 'w') as file:
+                file.write(str(point))
     return hurdles
 
+
+if __name__ == '__main__':
+    max_x = 40
+    max_y = 20
+    num = 10
+    max_size = 4
+
+    hurdles = create_map_window(None, '#', max_x, max_y, max_size, num)
+    print(hurdles)

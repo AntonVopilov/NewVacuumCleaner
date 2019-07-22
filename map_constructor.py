@@ -16,7 +16,7 @@ def hurdle_fabric(max_x, max_y, max_size, num_hurdles, x, y, size):
            [max_x, max_y, max_size, num_hurdles]):
         raise TypeError(f'Expected int arguments')
 
-    angles = [mp.pi / 10 * i for i in range(11)]
+    angles = bm.angles
 
     hurdles = set()
     for i in range(num_hurdles):

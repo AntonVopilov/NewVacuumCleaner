@@ -1,9 +1,9 @@
 import math as mp
 import functools
 from functools import lru_cache
+angles = [mp.pi / 10 * i for i in range(11)]
 
-
-@lru_cache(100)
+@lru_cache(len(angles))
 def rotation_matrix(angle):
     """Calculated rotation matrix"""
     res_matrix = [[0, 0], [0, 0]]

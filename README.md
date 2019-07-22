@@ -9,11 +9,11 @@
 
 Для запуска используйте следующую команду:
 
-python3 main_robot.py -wd 60 -lg 80 -n 100
+python3 launch_robot.py -wd 60 -lg 80 -n 100
 
 или
 
-python3 main_robot.py --width 60 --length 80 --num_hurdles 100
+python3 launch_robot.py --width 60 --length 80 --num_hurdles 100
 
 При запуске без аргументов будут использованны значения по умолчанию:
 --width 100 --length 100 --num_hurdles 100

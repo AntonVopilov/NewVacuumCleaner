@@ -72,5 +72,3 @@ class MapConstructor:
 
     def get_size(self):
         return self.map_width, self.map_length
-
-

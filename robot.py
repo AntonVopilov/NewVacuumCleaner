@@ -117,4 +117,3 @@ class Robot(object):
 
     def get_collision(self):
         return self.collision
-

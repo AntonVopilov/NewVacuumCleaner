@@ -1,7 +1,9 @@
 import math as mp
 import functools
 from functools import lru_cache
+
 angles = [mp.pi / 10 * i for i in range(11)]
+
 
 @lru_cache(len(angles))
 def rotation_matrix(angle):
@@ -42,6 +44,7 @@ class AbstractBody:
     There are attributes:
 
     """
+
     def __init__(self, *args, **kwargs):
         self.body_points = {
             'order': set(),
@@ -145,5 +148,3 @@ class CircleBody(AbstractBody):
         for y in range(round(mp.sqrt(self.radius ** 2))):
             self.body_points['special'].add((0, y))
             self.body_points['special'].add((0, -y))
-
-
